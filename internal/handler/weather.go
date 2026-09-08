@@ -10,7 +10,7 @@ import (
 func GetWeather(w http.ResponseWriter, r *http.Request) {
 	var valueDecode interface{}
 
-	fmt.Println("Request received", r.URL.Query())
+	fmt.Println("Request received", r.URL.Query().Get("id"))
 
 	err := json.NewDecoder(r.Body).Decode(&valueDecode)
 
