@@ -6,11 +6,12 @@ import (
 )
 
 func main() {
-	fmt.Println("Hello, World!")
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, World!")
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Hello, World Air!")
 	})
 
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":8080", mux)
 }
