@@ -7,6 +7,6 @@ import (
 
 func GetWeather(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Fprint(w, "Current weather information")
+	fmt.Fprint(w, "Current weather informataion")
 
 }
