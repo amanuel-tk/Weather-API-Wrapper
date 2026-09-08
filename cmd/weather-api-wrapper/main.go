@@ -1,17 +1,16 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
+
+	"github.com/amanuel-tk/weather-api-wrapper/internal/handler"
 )
 
 func main() {
 
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, World Air!")
-	})
+	mux.HandleFunc("GET /", handler.GetWeather)
 
 	http.ListenAndServe(":8080", mux)
 }
