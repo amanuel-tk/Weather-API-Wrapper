@@ -1,23 +1,20 @@
 package handler
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
 )
 
 func GetWeather(w http.ResponseWriter, r *http.Request) {
-	var valueDecode interface{}
+	city := r.URL.Query().Get("city")
 
-	fmt.Println("Request received", r.URL.Query().Get("id"))
-
-	err := json.NewDecoder(r.Body).Decode(&valueDecode)
-
-	if err != nil {
+	if city == "" {
 		errors.New("Something went wrong")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("message:city is needed"))
 	}
 
-	fmt.Println(valueDecode)
+	fmt.Println(city)
 
 }
