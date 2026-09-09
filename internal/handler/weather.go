@@ -26,4 +26,6 @@ func GetWeather(w http.ResponseWriter, r *http.Request) {
 	}
 	defer res.Body.Close()
 
+	fmt.Println(res.Body)
+
 }
