@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"os"
 )
 
 type WeatherResponse struct {
@@ -34,7 +35,7 @@ type WeatherResponse struct {
 }
 
 func GetWeather(city string) (WeatherResponse, error) {
-	res, err := http.Get("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/" + city + "?unitGroup=us&include=current&key=EN3UGBJT66YSWVX4HR3MT5KDU&contentType=json")
+	res, err := http.Get("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/" + city + "?unitGroup=us&include=current&key=" + os.Getenv("WEATHER_API_KEY") + "&contentType=json")
 	if err != nil {
 		return WeatherResponse{}, errors.New("Something went wrong")
 	}
