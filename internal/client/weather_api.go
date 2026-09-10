@@ -7,23 +7,30 @@ import (
 )
 
 type WeatherResponse struct {
-	Location                 string  `json:"location"`
-	Timezone                 string  `json:"timezone"`
-	Temperature              float64 `json:"temperature"`
-	FeelsLike                float64 `json:"feels_like"`
-	Condition                string  `json:"condition"`
-	Humidity                 float64 `json:"humidity"`
-	WindSpeed                float64 `json:"wind_speed"`
-	WindDirection            float64 `json:"wind_direction"`
-	Precipitation            float64 `json:"precipitation"`
-	PrecipitationProbability float64 `json:"precipitation_probability"`
-	CloudCover               float64 `json:"cloud_cover"`
-	Visibility               float64 `json:"visibility"`
-	Pressure                 float64 `json:"pressure"`
-	UVIndex                  float64 `json:"uv_index"`
-	Sunrise                  string  `json:"sunrise"`
-	Sunset                   string  `json:"sunset"`
-	Icon                     string  `json:"icon"`
+	Address  string `json:"address"`
+	Timezone string `json:"timezone"`
+
+	CurrentConditions struct {
+		Temp       float64 `json:"temp"`
+		FeelsLike  float64 `json:"feelslike"`
+		Conditions string  `json:"conditions"`
+		Humidity   float64 `json:"humidity"`
+
+		WindSpeed float64 `json:"windspeed"`
+		WindDir   float64 `json:"winddir"`
+
+		Precip     float64 `json:"precip"`
+		PrecipProb float64 `json:"precipprob"`
+
+		CloudCover float64 `json:"cloudcover"`
+		Visibility float64 `json:"visibility"`
+		Pressure   float64 `json:"pressure"`
+		UVIndex    float64 `json:"uvindex"`
+
+		Sunrise string `json:"sunrise"`
+		Sunset  string `json:"sunset"`
+		Icon    string `json:"icon"`
+	} `json:"currentConditions"`
 }
 
 func GetWeather(city string) (WeatherResponse, error) {
