@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -26,13 +25,6 @@ func main() {
 	if err := redisClient.Ping(ctx).Err(); err != nil {
 		log.Fatal("Redis connection failed:", err)
 	}
-
-	err = redisClient.Set(ctx, "name", "amanuel", 0).Err()
-	if err != nil {
-
-	}
-	name, err := redisClient.Get(ctx, "name").Result()
-	fmt.Println(name)
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /", handler.GetWeather)

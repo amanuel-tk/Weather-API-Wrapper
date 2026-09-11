@@ -44,12 +44,18 @@ func GetWeather(city string) (WeatherResponse, error) {
 
 	var data WeatherResponse
 
-	fmt.Println("Response status code:", res.StatusCode)
-	fmt.Println("Response body:", res.Body)
-	fmt.Println("API KEY:", os.Getenv("WEATHER_API_KEY"))
-	err = json.NewDecoder(res.Body).Decode(&data)
-	if err != nil {
-		fmt.Println(err)
+	fmt.Println("Weather API:", res.StatusCode)
+
+	if res.StatusCode != http.StatusOK {
+		return WeatherResponse{}, fmt.Errorf(
+			"weather API returned status %d",
+			res.StatusCode,
+		)
+	}
+
+	err1 := json.NewDecoder(res.Body).Decode(&data)
+	if err1 != nil {
+
 		return WeatherResponse{}, errors.New("Error decoding JSON")
 	}
 
