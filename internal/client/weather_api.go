@@ -51,8 +51,8 @@ func GetWeather(city string) (WeatherResponse, error) {
 		)
 	}
 
-	err1 := json.NewDecoder(res.Body).Decode(&data)
-	if err1 != nil {
+	err = json.NewDecoder(res.Body).Decode(&data)
+	if err != nil {
 
 		return WeatherResponse{}, errors.New("Error decoding JSON")
 	}
