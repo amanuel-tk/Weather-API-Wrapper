@@ -38,6 +38,8 @@ type WeatherResponse struct {
 func GetWeather(city string) (WeatherResponse, error) {
 	res, err := http.Get("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/" + city + "?unitGroup=us&include=current&key=" + os.Getenv("WEATHER_API_KEY") + "&contentType=json")
 	if err != nil {
+		fmt.Println(res.StatusCode)
+		fmt.Println(err)
 		return WeatherResponse{}, errors.New("Something went wrong")
 	}
 	defer res.Body.Close()
@@ -45,6 +47,8 @@ func GetWeather(city string) (WeatherResponse, error) {
 	var data WeatherResponse
 
 	if res.StatusCode != http.StatusOK {
+		fmt.Println(res.StatusCode)
+		fmt.Println(err)
 		return WeatherResponse{}, fmt.Errorf(
 			"weather API returned status %d",
 			res.StatusCode,
