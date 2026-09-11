@@ -25,9 +25,14 @@ func main() {
 	if err := redisClient.Ping(ctx).Err(); err != nil {
 		log.Fatal("Redis connection failed:", err)
 	}
+
+	h := &handler.Handler{
+		Redis: redisClient,
+	}
+
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("GET /", handler.GetWeather)
+	mux.HandleFunc("GET /", h.GetWeather)
 
 	http.ListenAndServe(":8080", mux)
 }
