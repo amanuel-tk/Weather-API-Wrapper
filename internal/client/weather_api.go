@@ -44,8 +44,6 @@ func GetWeather(city string) (WeatherResponse, error) {
 
 	var data WeatherResponse
 
-	fmt.Println("Weather API:", res.StatusCode)
-
 	if res.StatusCode != http.StatusOK {
 		return WeatherResponse{}, fmt.Errorf(
 			"weather API returned status %d",
