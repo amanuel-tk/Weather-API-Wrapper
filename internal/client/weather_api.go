@@ -3,6 +3,7 @@ package client
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"os"
 )
@@ -43,8 +44,12 @@ func GetWeather(city string) (WeatherResponse, error) {
 
 	var data WeatherResponse
 
+	fmt.Println("Response status code:", res.StatusCode)
+	fmt.Println("Response body:", res.Body)
+	fmt.Println("API KEY:", os.Getenv("WEATHER_API_KEY"))
 	err = json.NewDecoder(res.Body).Decode(&data)
 	if err != nil {
+		fmt.Println(err)
 		return WeatherResponse{}, errors.New("Error decoding JSON")
 	}
 
