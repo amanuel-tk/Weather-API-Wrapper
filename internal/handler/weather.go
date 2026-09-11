@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/amanuel-tk/weather-api-wrapper/internal/client"
 	"github.com/redis/go-redis/v9"
@@ -28,9 +29,17 @@ func (h *Handler) GetWeather(w http.ResponseWriter, r *http.Request) {
 
 	if err == nil {
 		fmt.Println(cachedValue)
-	}
-	if err != redis.Nil {
-		fmt.Println("something is wrong with reddis", err)
+		var data client.WeatherResponse
+
+		if err := json.Unmarshal([]byte(cachedValue), &data); err == nil {
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(data)
+			return
+		}
+		h.Redis.Del(ctx, city)
+		fmt.Println("bad cache, fetching fresh data")
+	} else if err != redis.Nil {
+		fmt.Println("something is wrong with redis", err)
 	}
 
 	data, err := client.GetWeather(city)
@@ -45,8 +54,8 @@ func (h *Handler) GetWeather(w http.ResponseWriter, r *http.Request) {
 	jsonData, err := json.Marshal(data)
 
 	if err == nil {
-		fmt.Println(jsonData)
-		err = h.Redis.Set(ctx, city, jsonData, 0).Err()
+
+		err = h.Redis.Set(ctx, city, jsonData, 10*time.Second).Err()
 
 	}
 
