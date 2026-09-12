@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 )
 
 type WeatherResponse struct {
@@ -36,7 +37,12 @@ type WeatherResponse struct {
 }
 
 func GetWeather(city string, apiKey string) (WeatherResponse, error) {
-	res, err := http.Get("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/" + city + "?unitGroup=us&include=current&key=" + apiKey + "&contentType=json")
+
+	httpClient := &http.Client{
+		Timeout: 10 * time.Second,
+	}
+
+	res, err := httpClient.Get("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/" + city + "?unitGroup=us&include=current&key=" + apiKey + "&contentType=json")
 	if err != nil {
 		return WeatherResponse{}, errors.New("Something went wrong")
 	}
