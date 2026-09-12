@@ -11,7 +11,9 @@ import (
 )
 
 type Handler struct {
-	Redis *redis.Client
+	Redis    *redis.Client
+	APIkey   string
+	CacheTTL time.Duration
 }
 
 func (h *Handler) GetWeather(w http.ResponseWriter, r *http.Request) {
@@ -42,7 +44,7 @@ func (h *Handler) GetWeather(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("something is wrong with redis", err)
 	}
 
-	data, err := client.GetWeather(city)
+	data, err := client.GetWeather(city, h.APIkey)
 
 	if err != nil {
 		fmt.Println(err.Error())
@@ -55,7 +57,7 @@ func (h *Handler) GetWeather(w http.ResponseWriter, r *http.Request) {
 
 	if err == nil {
 
-		err = h.Redis.Set(ctx, city, jsonData, 10*time.Second).Err()
+		err = h.Redis.Set(ctx, city, jsonData, h.CacheTTL).Err()
 
 	}
 

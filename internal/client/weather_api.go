@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 )
 
 type WeatherResponse struct {
@@ -36,8 +35,8 @@ type WeatherResponse struct {
 	} `json:"currentConditions"`
 }
 
-func GetWeather(city string) (WeatherResponse, error) {
-	res, err := http.Get("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/" + city + "?unitGroup=us&include=current&key=" + os.Getenv("WEATHER_API_KEY") + "&contentType=json")
+func GetWeather(city string, APIKey string) (WeatherResponse, error) {
+	res, err := http.Get("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/" + city + "?unitGroup=us&include=current&key=" + APIKey + "&contentType=json")
 	if err != nil {
 		return WeatherResponse{}, errors.New("Something went wrong")
 	}

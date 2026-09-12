@@ -6,13 +6,13 @@ import (
 	"net/http"
 
 	"github.com/amanuel-tk/weather-api-wrapper/internal/cache"
+	"github.com/amanuel-tk/weather-api-wrapper/internal/config"
 	"github.com/amanuel-tk/weather-api-wrapper/internal/handler"
-	"github.com/joho/godotenv"
 )
 
 func main() {
 
-	err := godotenv.Load()
+	cfg, err := config.Load()
 
 	if err != nil {
 		panic("Error loading .env file")
@@ -20,14 +20,16 @@ func main() {
 
 	ctx := context.Background()
 
-	redisClient := cache.NewRedisClient()
+	redisClient := cache.NewRedisClient(cfg.Redis.Address)
 
 	if err := redisClient.Ping(ctx).Err(); err != nil {
 		log.Fatal("Redis connection failed:", err)
 	}
 
 	h := &handler.Handler{
-		Redis: redisClient,
+		Redis:    redisClient,
+		APIkey:   cfg.Weather.APIKey,
+		CacheTTL: cfg.Redis.CacheTTL,
 	}
 
 	mux := http.NewServeMux()
