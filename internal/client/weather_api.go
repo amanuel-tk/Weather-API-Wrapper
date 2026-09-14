@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"time"
 )
 
@@ -42,7 +43,18 @@ func GetWeather(city string, apiKey string) (WeatherResponse, error) {
 		Timeout: 10 * time.Second,
 	}
 
-	res, err := httpClient.Get("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/" + city + "?unitGroup=us&include=current&key=" + apiKey + "&contentType=json")
+	baseUrl := "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/"
+
+	params := url.Values{}
+
+	params.Set("unitGroup", "us")
+	params.Set("include", "current")
+	params.Set("key", apiKey)
+	params.Set("contentType", "json")
+
+	requestUrl := baseUrl + url.PathEscape(city) + "?" + params.Encode()
+
+	res, err := httpClient.Get(requestUrl)
 	if err != nil {
 		return WeatherResponse{}, errors.New("Something went wrong")
 	}
