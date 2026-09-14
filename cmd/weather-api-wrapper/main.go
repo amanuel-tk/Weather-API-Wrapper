@@ -8,6 +8,8 @@ import (
 	"github.com/amanuel-tk/weather-api-wrapper/internal/cache"
 	"github.com/amanuel-tk/weather-api-wrapper/internal/config"
 	"github.com/amanuel-tk/weather-api-wrapper/internal/handler"
+	"github.com/amanuel-tk/weather-api-wrapper/internal/middleware"
+	"github.com/amanuel-tk/weather-api-wrapper/internal/ratelimiter"
 )
 
 func main() {
@@ -31,10 +33,16 @@ func main() {
 		APIkey:   cfg.Weather.APIKey,
 		CacheTTL: cfg.Redis.CacheTTL,
 	}
-
 	mux := http.NewServeMux()
-
 	mux.HandleFunc("GET /", h.GetWeather)
 
-	http.ListenAndServe(":8080", mux)
+	r1 := ratelimiter.NewRateLimiter()
+
+	mw := &middleware.Middleware{
+		RateLimiter: r1,
+	}
+
+	handleWithMiddleware := mw.Middleware(mux)
+
+	http.ListenAndServe(":8080", handleWithMiddleware)
 }
