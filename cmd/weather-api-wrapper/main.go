@@ -37,6 +37,7 @@ func main() {
 	mux.HandleFunc("GET /", h.GetWeather)
 
 	r1 := ratelimiter.NewRateLimiter()
+	r1.CleanUp()
 
 	mw := &middleware.Middleware{
 		RateLimiter: r1,

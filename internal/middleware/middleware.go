@@ -21,7 +21,7 @@ func (i *Middleware) Middleware(next http.Handler) http.Handler {
 
 		limiter := i.RateLimiter.GetLimiter(ip)
 
-		if !limiter.Allow() {
+		if !limiter.Limiter.Allow() {
 			http.Error(w, "Too many request", http.StatusTooManyRequests)
 			return
 		}
